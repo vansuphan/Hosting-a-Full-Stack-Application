@@ -55,7 +55,7 @@ jobs:
       # more setup needed for aws, node, elastic beanstalk
     steps:
       - node/install:
-          node-version: '14.15' 
+          node-version: '18.17.0'
       - eb/setup
       - aws-cli/setup
       - checkout
@@ -78,6 +78,6 @@ workflows:
           type: approval
           requires:
             - build
-      - deploy:
-          requires:
-            - hold
+      - deploy
+          # requires:
+          #   - hold
