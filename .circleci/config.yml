@@ -23,6 +23,8 @@ jobs:
             echo $(node --version)
             echo "NPM --version" 
             echo $(npm --version)
+            echo "AWS_ACCESS_KEY_ID:"
+            echo $AWS_ACCESS_KEY_ID
             npm run frontend:install
       # TODO: Install dependencies in the the backend API          
       - run:
@@ -52,13 +54,6 @@ jobs:
           node-version: '14.15' 
       - eb/setup
       - aws-cli/setup
-      - run:
-          name: Configure AWS Profile
-          command: |
-            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-            aws configure set region $AWS_DEFAULT_REGION
-            aws configure set output json
       - checkout
       - run:
           name: Deploy App
