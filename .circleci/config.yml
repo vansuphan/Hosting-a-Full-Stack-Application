@@ -6,6 +6,10 @@ orbs:
   eb: circleci/aws-elastic-beanstalk@1.0.2
   # different jobs are calles later in the workflows sections
 
+Branches:
+  only: 
+     -  main
+
 jobs:
   build:
     docker:
@@ -49,7 +53,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
           type: approval
           requires:
             - build
