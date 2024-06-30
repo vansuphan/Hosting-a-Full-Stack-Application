@@ -1,32 +1,84 @@
 version: 2.1
 orbs:
-    node: circleci/node@4.1.0
-    aws-cli: circleci/aws-cli@1.3.1
-    eb: circleci/aws-elastic-beanstalk@1.0.2
+  # orgs contain basc recipes and reproducible actions (install node, aws, etc.)
+  node: circleci/node@5.0.2
+  eb: circleci/aws-elastic-beanstalk@2.0.1
+  aws-cli: circleci/aws-cli@3.1.1
+  # different jobs are calles later in the workflows sections
 jobs:
-    build:
-        docker:
-            - image: "cimg/base:stable"
-        steps:
-            - node/install
-            - checkout 
-            - aws-cli/setup
-            - eb/setup
-            - run:
-                name: Install Front-End Dependencies
-                command: npm run frontend:install
-            - run:
-                name: Front-End Build
-                command: npm run frontend:build
-            - run:
-                name: Install Back-End Dependencies
-                command: npm run api:install
-            - run:
-                name: Back-End Build
-                command: npm run api:build
-            - run:
-                name: Deploy Backend Application
-                command: npm run api:deploy
-            - run:
-                name: Deploy Frontend Application
-                command: npm run frontend:deploy
+  build:
+    docker:
+      # the base image can run most needed actions with orbs
+      - image: "cimg/node:18.17.0"
+    steps:
+      # install node and checkout code
+      - node/install:
+          node-version: '18.17.0'         
+      - checkout
+      # Use root level package.json to install dependencies in the frontend app
+      - run:
+          name: Install Front-End Dependencies
+          command: |
+            echo "NODE --version" 
+            echo $(node --version)
+            echo "NPM --version" 
+            echo $(npm --version)
+            npm run frontend:install
+      # TODO: Install dependencies in the the backend API          
+      - run:
+          name: Install API Dependencies
+          command: |
+           echo "TODO: Install dependencies in the the backend API  "
+           npm run api:install
+      # TODO: Build the frontend app
+      - run:
+          name: Front-End Build
+          command: |
+            echo "TODO: Build the frontend app"
+            npm run frontend:build
+      # TODO: Build the backend API      
+      - run:
+          name: API Build
+          command: |
+            echo "TODO: Build the backend API"
+            npm run api:build
+  # deploy step will run only after manual approval
+  deploy:
+    docker:
+      - image: "cimg/base:stable"
+      # more setup needed for aws, node, elastic beanstalk
+    steps:
+      - node/install:
+          node-version: '14.15' 
+      - eb/setup
+      - aws-cli/setup
+      - run:
+          name: Configure AWS Profile
+          command: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set region $AWS_DEFAULT_REGION
+            aws configure set output json
+      - checkout
+      - run:
+          name: Deploy App
+          # TODO: Install, build, deploy in both apps
+          command: |
+            echo "# TODO: Install, build, deploy in both apps"
+            npm run deploy
+            
+workflows:
+  udagram:
+    jobs:
+      - build
+      - hold:
+          filters:
+            branches:
+              only:
+                - master
+          type: approval
+          requires:
+            - build
+      - deploy:
+          requires:
+            - build
