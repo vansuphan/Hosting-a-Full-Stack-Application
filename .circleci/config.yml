@@ -20,13 +20,13 @@ jobs:
                 command: npm run frontend:build
             - run:
                 name: Install Back-End Dependencies
-                command: npm run backend:install
+                command: npm run api:install
             - run:
                 name: Back-End Build
-                command: npm run backend:build
+                command: npm run api:build
             - run:
                 name: Deploy Backend Application
-                command: npm run backend:deploy
+                command: npm run api:deploy
             - run:
                 name: Deploy Frontend Application
                 command: npm run frontend:deploy
