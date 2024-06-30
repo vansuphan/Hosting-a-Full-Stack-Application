@@ -6,7 +6,7 @@ orbs:
   eb: circleci/aws-elastic-beanstalk@1.0.2
   # different jobs are calles later in the workflows sections
 
-Branches:
+branches:
   only: 
      -  main
 
@@ -44,19 +44,3 @@ jobs:
       - run:
           name: Deploy Frontend Application
           command: npm run frontend:deploy
-
-workflows:
-  udagram:
-    jobs:
-      - build
-      - hold:
-          filters:
-            branches:
-              only:
-                - main
-          type: approval
-          requires:
-            - build
-      - deploy:
-          requires:
-            - build
