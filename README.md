@@ -1,5 +1,9 @@
 # Hosting a Full-Stack Application
 
+## Hosting link
+The link to the application can be seen [here](http://supv-udagram.s3-website-us-east-1.amazonaws.com/).
+
+
 ### **You can use you own project completed in previous courses or use the provided Udagram app for completing this final project.**
 
 ---
